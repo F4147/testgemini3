@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎁 冬のクイズチャレンジ</title>
+
+    <style>
+        body {
+            /* 変更点: 背景画像はJSで設定するため、ここでは初期設定のみ */
+            background-color: #1e3c72; /* デフォルトの背景色 */
+            color: white; 
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; 
+            text-align: center;
+            
+            /* スライドショー用背景のスタイル */
+            background-size: cover; 
+            background-position: center; 
+            background-attachment: fixed; 
+            transition: background-image 1s ease-in-out; /* 画像切り替え時のフェードイン/アウト効果 */
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.15); /* 半透明の白い背景 */
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            max-width: 400px; 
+            width: 90%;
+        }
+
+        h1 {
+            color: #ffd700; 
+            margin-bottom: 20px;
+        }
+
+        #answer-input {
+            width: 80%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        button {
+            background-color: #c0392b; 
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #e74c3c;
+        }
+
+        #message {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #ffdd00; 
+            height: 20px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .success-title {
+            font-size: 2.5em;
+            color: #2ecc71; 
+        }
+
+        .success-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            margin-top: 20px;
+            border: 5px solid white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div id="quiz-page">
+            <h1>❄️ 冬のクイズチャレンジ 🎄</h1>
+            <p>この雪景色で楽しめる冬のスポーツといえば何でしょう？</p>
+            
+            <input type="text" id="answer-input" placeholder="ひらがなで入力してください">
+            
+            <button onclick="checkAnswer()">回答する</button>
+
+            <p id="message"></p>
+        </div>
+
+        <div id="success-page" class="hidden">
+            <h1 class="success-title">🎉 大正解！ 🎉</h1>
+            <p>素晴らしい！あなたはクリスマスの魔法を知っていますね！</p>
+            <img src="IMG_0388.JPG" alt="スキーをしている写真" class="success-image"> 
+            <p>※必要に応じて正解時の画像を別のものに変更してください。</p>
+        </div>
+    </div>
+
+    <script>
+        // --- スライドショー用のJavaScriptコード ---
+        const backgroundImages = [
+            'IMG_0212.JPG',
+            'IMG_0224.JPG',
+            'IMG_0226.JPG',
+            'IMG_0387.JPG',
+            'IMG_0388.JPG',
+            'IMG_0398.JPG',
+            'IMG_0401.JPG'
+        ];
+        let currentImageIndex = 0;
+        const slideIntervalTime = 5000; // 5秒ごとに画像を切り替える
+
+        function changeBackgroundImage() {
+            document.body.style.backgroundImage = `url('${backgroundImages[currentImageIndex]}')`;
+            currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
+        }
+
+        // ページ読み込み時に最初の画像を設定
+        document.addEventListener('DOMContentLoaded', () => {
+            changeBackgroundImage(); // 最初の画像を表示
+            setInterval(changeBackgroundImage, slideIntervalTime); // 以降、定期的に画像を切り替え
+        });
+
+
+        // --- クイズロジックのJavaScriptコード ---
+        const CORRECT_ANSWER = "スキー";
+
+        function checkAnswer() {
+            const inputElement = document.getElementById('answer-input');
+            const inputAnswer = inputElement.value.trim().toLowerCase();
+            
+            const messageElement = document.getElementById('message');
+            const quizPage = document.getElementById('quiz-page');
+            const successPage = document.getElementById('success-page');
+
+            if (inputAnswer === CORRECT_ANSWER) {
+                messageElement.textContent = '';
+                quizPage.classList.add('hidden'); 
+                successPage.classList.remove('hidden'); 
+            } else {
+                messageElement.textContent = "😔 残念、違います。もう一度よく考えてみましょう。";
+                inputElement.value = ''; 
+                messageElement.style.color = '#e74c3c'; 
+            }
+        }
+    </script>
+</body>
+</html>
