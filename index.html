@@ -112,53 +112,63 @@
         </div>
     </div>
 
-    <script>
-        // --- スライドショー用のJavaScriptコード ---
-        const backgroundImages = [
-            'IMG_0212.JPG',
-            'IMG_0224.JPG',
-            'IMG_0226.JPG',
-            'IMG_0387.JPG',
-            'IMG_0388.JPG',
-            'IMG_0398.JPG',
-            'IMG_0401.JPG'
-        ];
-        let currentImageIndex = 0;
-        const slideIntervalTime = 5000; // 5秒ごとに画像を切り替える
+ <script>
+    // --- スライドショー用のJavaScriptコード ---
+    const backgroundImages = [
+        'IMG_0212.JPG',
+        'IMG_0224.JPG',
+        'IMG_0226.JPG',
+        'IMG_0387.JPG',
+        'IMG_0388.JPG',
+        'IMG_0398.JPG',
+        'IMG_0401.JPG'
+    ];
+    let currentImageIndex = 0;
+    const slideIntervalTime = 5000; // 5秒ごとに画像を切り替える
 
-        function changeBackgroundImage() {
-            document.body.style.backgroundImage = `url('${backgroundImages[currentImageIndex]}')`;
-            currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
-        }
-
-        // ページ読み込み時に最初の画像を設定
-        document.addEventListener('DOMContentLoaded', () => {
-            changeBackgroundImage(); // 最初の画像を表示
-            setInterval(changeBackgroundImage, slideIntervalTime); // 以降、定期的に画像を切り替え
+    // 【追加】画像を事前に読み込む関数
+    function preloadImages(imageArray) {
+        imageArray.forEach((imagePath) => {
+            const img = new Image();
+            img.src = imagePath;
         });
+    }
+
+    function changeBackgroundImage() {
+        document.body.style.backgroundImage = `url('${backgroundImages[currentImageIndex]}')`;
+        currentImageIndex = (currentImageIndex + 1) % backgroundImages.length;
+    }
+
+    // ページ読み込み時に実行
+    document.addEventListener('DOMContentLoaded', () => {
+        preloadImages(backgroundImages); // 最初に全ての画像をキャッシュさせる
+
+        changeBackgroundImage(); // 最初の画像を表示
+        setInterval(changeBackgroundImage, slideIntervalTime); // 以降、定期的に画像を切り替え
+    });
 
 
-        // --- クイズロジックのJavaScriptコード ---
-        const CORRECT_ANSWER = "スキー";
+    // --- クイズロジックのJavaScriptコード ---
+    const CORRECT_ANSWER = "スキー";
 
-        function checkAnswer() {
-            const inputElement = document.getElementById('answer-input');
-            const inputAnswer = inputElement.value.trim().toLowerCase();
-            
-            const messageElement = document.getElementById('message');
-            const quizPage = document.getElementById('quiz-page');
-            const successPage = document.getElementById('success-page');
+    function checkAnswer() {
+        const inputElement = document.getElementById('answer-input');
+        const inputAnswer = inputElement.value.trim().toLowerCase();
+        
+        const messageElement = document.getElementById('message');
+        const quizPage = document.getElementById('quiz-page');
+        const successPage = document.getElementById('success-page');
 
-            if (inputAnswer === CORRECT_ANSWER) {
-                messageElement.textContent = '';
-                quizPage.classList.add('hidden'); 
-                successPage.classList.remove('hidden'); 
-            } else {
-                messageElement.textContent = "😔 残念、違います。もう一度よく考えてみましょう。";
-                inputElement.value = ''; 
-                messageElement.style.color = '#e74c3c'; 
-            }
+        if (inputAnswer === CORRECT_ANSWER) {
+            messageElement.textContent = '';
+            quizPage.classList.add('hidden'); 
+            successPage.classList.remove('hidden'); 
+        } else {
+            messageElement.textContent = "😔 残念、違います。もう一度よく考えてみましょう。";
+            inputElement.value = ''; 
+            messageElement.style.color = '#e74c3c'; 
         }
-    </script>
+    }
+</script>
 </body>
 </html>
